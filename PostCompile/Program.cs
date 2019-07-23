@@ -30,8 +30,7 @@ namespace PostCompile
                 }
 
                 var module = ModuleDefinition.ReadModule(assemblyPath);
-                var types = module.Types.Where(x => result.TaskTypes.Contains(x.FullName)).ToList();
-                foreach (var t in types)
+                foreach (var t in module.Types.Where(x => result.TaskTypes.Contains(x.FullName)))
                 {
                     module.Types.Remove(t);
                 }
@@ -42,6 +41,7 @@ namespace PostCompile
             catch (Exception ex)
             {
                 Console.WriteLine("Critical error: " + ex.Message);
+                throw;
             }
         }
     }
