@@ -46,46 +46,23 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CodeAnalysis">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.0.6.4033103-beta\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.0.6.4033103-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.Workspaces">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.Workspaces.0.6.4033103-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.Workspaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Workspaces">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.0.6.4033103-beta\lib\net45\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Mdb">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Pdb">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable">
-      <HintPath>..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reflection.Metadata">
-      <HintPath>..\packages\Microsoft.Bcl.Metadata.1.0.9-alpha\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PostCompile.Common\PostCompile.Common.csproj">
       <Project>{6bcff960-e6e5-4834-938d-6839d6c5103c}</Project>
       <Name>PostCompile.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces">
+      <Version>0.6.4033103-beta</Version>
+    </PackageReference>
+    <PackageReference Include="Mono.Cecil">
+      <Version>0.9.5.4</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
