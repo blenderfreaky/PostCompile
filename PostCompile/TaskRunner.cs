@@ -47,31 +47,27 @@ namespace PostCompile
 
         private static void CheckTaskDependencies(Dictionary<Type, IPostCompileTask> tasks)
         {
-            var invalidDependencies =
-                (from task in tasks
-                 from dependency in task.Value.DependsOn
-                 where !typeof(IPostCompileTask).IsAssignableFrom(dependency)
-                 select new { Dependent = task.Key, Dependency = dependency }).ToList();
-            foreach (var id in invalidDependencies)
-            {
-                Error("Invalid dependency '{0}' for task '{1}'.", id.Dependency.FullName, id.Dependent.FullName);
-            }
+            List<InvalidDependency> invalidDependencies = (from task in tasks
+                                                           from dependency in task.Value.DependsOn
+                                                           where !typeof(IPostCompileTask).IsAssignableFrom(dependency)
+                                                           select new InvalidDependency(dependency, task.Key))
+                                                           .ToList();
 
-            var missingDependencies =
-                (from task in tasks
-                 from dependency in task.Value.DependsOn
-                 where !tasks.ContainsKey(task.Key)
-                 where typeof(IPostCompileTask).IsAssignableFrom(dependency)
-                 select new { Dependent = task.Key, Dependency = dependency }).ToList();
-
-            foreach (var md in missingDependencies)
-            {
-                Error("Missing dependency '{0}' for task '{1}'.", md.Dependency.FullName, md.Dependent.FullName);
-            }
+            List<MissingDependency> missingDependencies = (from task in tasks
+                                                           from dependency in task.Value.DependsOn
+                                                           where !tasks.ContainsKey(task.Key)
+                                                           where typeof(IPostCompileTask).IsAssignableFrom(dependency)
+                                                           select new MissingDependency(dependency, task.Key))
+                                                           .ToList();
 
             if (invalidDependencies.Count > 0 || missingDependencies.Count > 0)
             {
-                throw new Exception("Aborted to invalid or missing dependencies.");
+                invalidDependencies.ForEach(x => Error(x.ToString()));
+                missingDependencies.ForEach(x => Error(x.ToString()));
+
+                throw new TaksRunnerDependencyException("Aborted due to invalid or missing dependencies.",
+                    missingDependencies,
+                    invalidDependencies);
             }
         }
 
