@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace PostCompile.Tests.Helpers
 {
     //
-    // Hierarchiy:
+    // Hierarchy:
     //
     //   A
     //  / \
