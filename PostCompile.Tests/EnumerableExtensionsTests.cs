@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using PostCompile.Common;
+﻿using PostCompile.Common;
 using PostCompile.Extensions;
 using PostCompile.Tests.Helpers;
+using System;
+using System.Linq;
+using System.Text;
 using Xunit;
 
 namespace PostCompile.Tests

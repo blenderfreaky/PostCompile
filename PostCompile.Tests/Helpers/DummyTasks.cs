@@ -1,13 +1,13 @@
-﻿using System;
+﻿using PostCompile.Common;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PostCompile.Common;
 
 namespace PostCompile.Tests.Helpers
 {
     //
     // Hierarchiy:
-    // 
+    //
     //   A
     //  / \
     // B   C
@@ -31,7 +31,7 @@ namespace PostCompile.Tests.Helpers
     {
         public override IEnumerable<Type> DependsOn
         {
-            get { return new[] {typeof (DummyTaskA)}; }
+            get { return new[] { typeof(DummyTaskA) }; }
         }
 
         public override Task RunAsync()
@@ -65,6 +65,7 @@ namespace PostCompile.Tests.Helpers
             throw new NotSupportedException();
         }
     }
+
     public class DummyTaskE : PostCompileTask
     {
         public override IEnumerable<Type> DependsOn
@@ -77,6 +78,7 @@ namespace PostCompile.Tests.Helpers
             throw new NotSupportedException();
         }
     }
+
     public class DummyTaskF : PostCompileTask
     {
         public override IEnumerable<Type> DependsOn

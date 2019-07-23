@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Mono.Cecil;
+using System;
 using System.IO;
 using System.Linq;
-using Mono.Cecil;
 
 namespace PostCompile
 {
@@ -12,7 +12,7 @@ namespace PostCompile
             try
             {
                 if (args.Length != 2)
-                    throw new ArgumentException("Invalid of amount arguments passed.", "args");
+                    throw new ArgumentException("Invalid of amount arguments passed.", nameof(args));
 
                 var assemblyPath = args[0];
                 var solutionPath = args[1];

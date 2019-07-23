@@ -1,8 +1,8 @@
-﻿using System;
+﻿using PostCompile.Extensions;
+using PostCompile.Tests.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
-using PostCompile.Extensions;
-using PostCompile.Tests.Helpers;
 using Xunit;
 
 namespace PostCompile.Tests

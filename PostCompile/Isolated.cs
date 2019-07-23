@@ -6,7 +6,6 @@ namespace PostCompile
         where T : MarshalByRefObject
     {
         private AppDomain _domain;
-        private readonly T _value;
 
         public Isolated()
         {
@@ -14,16 +13,10 @@ namespace PostCompile
 
             var type = typeof(T);
 
-            _value = (T)_domain.CreateInstanceAndUnwrap(type.Assembly.FullName, type.FullName);
+            Value = (T)_domain.CreateInstanceAndUnwrap(type.Assembly.FullName, type.FullName);
         }
 
-        public T Value
-        {
-            get
-            {
-                return _value;
-            }
-        }
+        public T Value { get; }
 
         public void Dispose()
         {

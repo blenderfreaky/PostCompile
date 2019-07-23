@@ -9,7 +9,7 @@ namespace PostCompile.Extensions
         public static bool HasDefaultConstructor(this Type type)
         {
             if (type == null)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
 
             return type.GetConstructor(Type.EmptyTypes) != null;
         }
@@ -17,7 +17,7 @@ namespace PostCompile.Extensions
         public static string ToDisplayString(this Type type)
         {
             if (type == null)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
 
             if (type.FullName == null)
                 return string.Empty;
@@ -61,8 +61,8 @@ namespace PostCompile.Extensions
         public static string ToDisplayString(this MethodInfo methodInfo)
         {
             if (methodInfo == null)
-                throw new ArgumentNullException("methodInfo");
-            
+                throw new ArgumentNullException(nameof(methodInfo));
+
             return string.Format(
                 "{0}.{1}({2})",
                 methodInfo.DeclaringType.ToDisplayString(),
@@ -73,7 +73,7 @@ namespace PostCompile.Extensions
         public static string ToDisplayString(this PropertyInfo propertyInfo)
         {
             if (propertyInfo == null)
-                throw new ArgumentNullException("propertyInfo");
+                throw new ArgumentNullException(nameof(propertyInfo));
 
             return string.Format(
                 "{0}.{1}",
@@ -84,7 +84,7 @@ namespace PostCompile.Extensions
         public static string ToDisplayString(this ConstructorInfo constructorInfo)
         {
             if (constructorInfo == null)
-                throw new ArgumentNullException("constructorInfo");
+                throw new ArgumentNullException(nameof(constructorInfo));
 
             return string.Format(
                 "{0}({1})",
@@ -95,7 +95,7 @@ namespace PostCompile.Extensions
         public static string ToDisplayString(this FieldInfo fieldInfo)
         {
             if (fieldInfo == null)
-                throw new ArgumentNullException("fieldInfo");
+                throw new ArgumentNullException(nameof(fieldInfo));
 
             return string.Format(
                 "{0}.{1}",
@@ -106,7 +106,7 @@ namespace PostCompile.Extensions
         public static string ToDisplayString(this TypeInfo typeInfo)
         {
             if (typeInfo == null)
-                throw new ArgumentNullException("typeInfo");
+                throw new ArgumentNullException(nameof(typeInfo));
 
             return typeInfo.AsType().ToDisplayString();
         }

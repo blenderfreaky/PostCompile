@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using PostCompile.Extensions;
 using PostCompile.Tests.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace PostCompile.Tests
@@ -19,12 +19,13 @@ namespace PostCompile.Tests
 
         public RoslynExtensionsTests()
         {
-            var workspace = MSBuildWorkspace.Create();
-            _solution = workspace.OpenSolutionAsync(@"..\..\..\PostCompile.sln").Result;
-            _testProject = _solution.Projects.First(x => x.Name == "PostCompile.Tests");
-            _testProjectCompilation = _testProject.GetCompilationAsync().Result;
+            using (var workspace = MSBuildWorkspace.Create())
+            {
+                _solution = workspace.OpenSolutionAsync(@"..\..\..\PostCompile.sln").Result;
+                _testProject = _solution.Projects.First(x => x.Name == "PostCompile.Tests");
+                _testProjectCompilation = _testProject.GetCompilationAsync().Result;
+            }
         }
-
 
         [Fact]
         public void GetTypeSymbols()

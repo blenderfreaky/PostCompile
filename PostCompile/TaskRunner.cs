@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using PostCompile.Common;
 using PostCompile.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace PostCompile
 {
@@ -24,8 +25,11 @@ namespace PostCompile
 
             var sortedTaskInstances = tasks.Values.TopologicalSort(x => x.DependsOn.Select(y => tasks[y])).ToList();
 
-            var workspace = MSBuildWorkspace.Create();
-            var solution = workspace.OpenSolutionAsync(solutionPath).Result;
+            Solution solution;
+            using (var workspace = MSBuildWorkspace.Create())
+            {
+                solution = workspace.OpenSolutionAsync(solutionPath).Result;
+            }
             var log = new ConcreteLog(solution, Console.Out);
 
             foreach (var taskInstance in sortedTaskInstances)
@@ -65,7 +69,7 @@ namespace PostCompile
                 Error("Missing dependency '{0}' for task '{1}'.", md.Dependency.FullName, md.Dependent.FullName);
             }
 
-            if (invalidDependencies.Any() || missingDependencies.Any())
+            if (invalidDependencies.Count > 0 || missingDependencies.Count > 0)
             {
                 throw new Exception("Aborted to invalid or missing dependencies.");
             }

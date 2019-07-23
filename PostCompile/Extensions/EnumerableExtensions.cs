@@ -9,9 +9,9 @@ namespace PostCompile.Extensions
             where T : class
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (dependencies == null)
-                throw new ArgumentNullException("dependencies");
+                throw new ArgumentNullException(nameof(dependencies));
 
             var sorted = new List<T>();
             var visited = new HashSet<T>();
@@ -26,13 +26,13 @@ namespace PostCompile.Extensions
             where T : class
         {
             if (item == null)
-                throw new ArgumentNullException("item");
+                throw new ArgumentNullException(nameof(item));
             if (visited == null)
-                throw new ArgumentNullException("visited");
+                throw new ArgumentNullException(nameof(visited));
             if (sorted == null)
-                throw new ArgumentNullException("sorted");
+                throw new ArgumentNullException(nameof(sorted));
             if (dependencies == null)
-                throw new ArgumentNullException("dependencies");
+                throw new ArgumentNullException(nameof(dependencies));
 
             if (!visited.Contains(item))
             {

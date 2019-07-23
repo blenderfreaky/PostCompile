@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.CodeAnalysis;
 
 namespace PostCompile.Extensions
 {
@@ -11,7 +11,7 @@ namespace PostCompile.Extensions
         public static IEnumerable<ITypeSymbol> GetTypeSymbols(this INamespaceSymbol namespaceSymbol)
         {
             if (namespaceSymbol == null)
-                throw new ArgumentNullException("namespaceSymbol");
+                throw new ArgumentNullException(nameof(namespaceSymbol));
 
             return
                 namespaceSymbol
@@ -24,20 +24,20 @@ namespace PostCompile.Extensions
         public static IEnumerable<ITypeSymbol> GetTypeSymbols(this ITypeSymbol typeSymbol)
         {
             if (typeSymbol == null)
-                throw new ArgumentNullException("typeSymbol");
+                throw new ArgumentNullException(nameof(typeSymbol));
 
             return
                 typeSymbol
                     .GetTypeMembers()
                     .Union(typeSymbol.GetTypeMembers().SelectMany(x => x.GetTypeSymbols()));
-        } 
+        }
 
         public static ITypeSymbol GetSymbol(this Solution solution, Type type)
         {
             if (solution == null)
-                throw new ArgumentNullException("solution");
+                throw new ArgumentNullException(nameof(solution));
             if (type == null)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
 
             foreach (var project in solution.Projects)
             {
@@ -53,9 +53,9 @@ namespace PostCompile.Extensions
         public static IMethodSymbol GetSymbol(this Solution solution, MethodInfo methodInfo)
         {
             if (solution == null)
-                throw new ArgumentNullException("solution");
+                throw new ArgumentNullException(nameof(solution));
             if (methodInfo == null)
-                throw new ArgumentNullException("methodInfo");
+                throw new ArgumentNullException(nameof(methodInfo));
 
             var typeSymbol = solution.GetSymbol(methodInfo.DeclaringType);
             if (typeSymbol != null)
@@ -73,9 +73,9 @@ namespace PostCompile.Extensions
         public static IPropertySymbol GetSymbol(this Solution solution, PropertyInfo propertyInfo)
         {
             if (solution == null)
-                throw new ArgumentNullException("solution");
+                throw new ArgumentNullException(nameof(solution));
             if (propertyInfo == null)
-                throw new ArgumentNullException("propertyInfo");
+                throw new ArgumentNullException(nameof(propertyInfo));
 
             var typeSymbol = solution.GetSymbol(propertyInfo.DeclaringType);
             if (typeSymbol != null)
@@ -85,7 +85,6 @@ namespace PostCompile.Extensions
                         .OfType<IPropertySymbol>()
                         .SingleOrDefault(propertySymbol => propertySymbol.Is(propertyInfo));
                 return matchingSymbol;
-
             }
 
             return null;
@@ -94,9 +93,9 @@ namespace PostCompile.Extensions
         public static IMethodSymbol GetSymbol(this Solution solution, ConstructorInfo constructorInfo)
         {
             if (solution == null)
-                throw new ArgumentNullException("solution");
+                throw new ArgumentNullException(nameof(solution));
             if (constructorInfo == null)
-                throw new ArgumentNullException("constructorInfo");
+                throw new ArgumentNullException(nameof(constructorInfo));
 
             var typeSymbol = solution.GetSymbol(constructorInfo.DeclaringType);
             if (typeSymbol != null)
@@ -114,9 +113,9 @@ namespace PostCompile.Extensions
         public static IFieldSymbol GetSymbol(this Solution solution, FieldInfo fieldInfo)
         {
             if (solution == null)
-                throw new ArgumentNullException("solution");
+                throw new ArgumentNullException(nameof(solution));
             if (fieldInfo == null)
-                throw new ArgumentNullException("fieldInfo");
+                throw new ArgumentNullException(nameof(fieldInfo));
 
             var typeSymbol = solution.GetSymbol(fieldInfo.DeclaringType);
             if (typeSymbol != null)
@@ -134,9 +133,9 @@ namespace PostCompile.Extensions
         public static bool Is(this ITypeSymbol typeSymbol, Type type)
         {
             if (typeSymbol == null)
-                throw new ArgumentNullException("typeSymbol");
+                throw new ArgumentNullException(nameof(typeSymbol));
             if (type == null)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
 
             return typeSymbol.ToDisplayString() == type.ToDisplayString();
         }
@@ -144,9 +143,9 @@ namespace PostCompile.Extensions
         public static bool Is(this IMethodSymbol methodSymbol, MethodInfo methodInfo)
         {
             if (methodSymbol == null)
-                throw new ArgumentNullException("methodSymbol");
+                throw new ArgumentNullException(nameof(methodSymbol));
             if (methodInfo == null)
-                throw new ArgumentNullException("methodInfo");
+                throw new ArgumentNullException(nameof(methodInfo));
 
             if (methodSymbol.Name != methodInfo.Name)
                 return false;
@@ -169,9 +168,9 @@ namespace PostCompile.Extensions
         public static bool Is(this IMethodSymbol methodSymbol, ConstructorInfo constructorInfo)
         {
             if (methodSymbol == null)
-                throw new ArgumentNullException("methodSymbol");
+                throw new ArgumentNullException(nameof(methodSymbol));
             if (constructorInfo == null)
-                throw new ArgumentNullException("constructorInfo");
+                throw new ArgumentNullException(nameof(constructorInfo));
 
             if (methodSymbol.Name != ".ctor")
                 return false;
@@ -194,9 +193,9 @@ namespace PostCompile.Extensions
         public static bool Is(this IPropertySymbol propertySymbol, PropertyInfo propertyInfo)
         {
             if (propertySymbol == null)
-                throw new ArgumentNullException("propertySymbol");
+                throw new ArgumentNullException(nameof(propertySymbol));
             if (propertyInfo == null)
-                throw new ArgumentNullException("propertyInfo");
+                throw new ArgumentNullException(nameof(propertyInfo));
 
             return propertySymbol.ContainingType.Is(propertyInfo.DeclaringType)
                    && propertySymbol.Name == propertyInfo.Name
@@ -206,9 +205,9 @@ namespace PostCompile.Extensions
         public static bool Is(this IFieldSymbol fieldSymbol, FieldInfo fieldInfo)
         {
             if (fieldSymbol == null)
-                throw new ArgumentNullException("fieldSymbol");
+                throw new ArgumentNullException(nameof(fieldSymbol));
             if (fieldInfo == null)
-                throw new ArgumentNullException("fieldInfo");
+                throw new ArgumentNullException(nameof(fieldInfo));
 
             return fieldSymbol.ContainingType.Is(fieldInfo.DeclaringType)
                    && fieldSymbol.Name == fieldInfo.Name

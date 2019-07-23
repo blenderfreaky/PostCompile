@@ -1,11 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.FindSymbols;
 using PostCompile.Common;
 using PostCompile.Extensions;
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using TypeInfo = System.Reflection.TypeInfo;
 
 namespace PostCompile
@@ -17,13 +17,8 @@ namespace PostCompile
 
         public ConcreteLog(Solution solution, TextWriter writer)
         {
-            if (solution == null)
-                throw new ArgumentNullException("solution");
-            if (writer == null)
-                throw new ArgumentNullException("writer");
-
-            _solution = solution;
-            _writer = writer;
+            _solution = solution ?? throw new ArgumentNullException(nameof(solution));
+            _writer = writer ?? throw new ArgumentNullException(nameof(writer));
         }
 
         #region Error Interface
@@ -123,7 +118,7 @@ namespace PostCompile
             }
         }
 
-        #endregion
+        #endregion Error Interface
 
         #region Error Private
 
@@ -149,9 +144,9 @@ namespace PostCompile
             Error(lineSpan.Path, lineSpan.StartLinePosition.Line + 1, lineSpan.StartLinePosition.Character + 1, message);
         }
 
-        #endregion
+        #endregion Error Private
 
-        #region Warning Interface 
+        #region Warning Interface
 
         public void Warning(string message)
         {
@@ -248,7 +243,7 @@ namespace PostCompile
             }
         }
 
-        #endregion
+        #endregion Warning Interface
 
         #region Warning Private
 
@@ -274,7 +269,7 @@ namespace PostCompile
             Warning(lineSpan.Path, lineSpan.StartLinePosition.Line + 1, lineSpan.StartLinePosition.Character + 1, message);
         }
 
-        #endregion
+        #endregion Warning Private
 
         #region Usage Error Interface
 
@@ -329,7 +324,7 @@ namespace PostCompile
             }
         }
 
-        #endregion
+        #endregion Usage Error Interface
 
         #region Usage Warning Interface
 
@@ -384,6 +379,6 @@ namespace PostCompile
             }
         }
 
-        #endregion
+        #endregion Usage Warning Interface
     }
 }
