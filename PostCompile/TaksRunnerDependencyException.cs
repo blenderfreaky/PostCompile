@@ -11,7 +11,11 @@ namespace PostCompile
 {
 
     [Serializable]
+#pragma warning disable CA2229 // Implement serialization constructors
+#pragma warning disable RCS1194 // Implement exception constructors.
     public class TaksRunnerDependencyException : Exception
+#pragma warning restore RCS1194 // Implement exception constructors.
+#pragma warning restore CA2229 // Implement serialization constructors
     {
         public ICollection<MissingDependency> MissingDependencies { get; set; }
         public ICollection<InvalidDependency> InvalidDependencies { get; set; }
@@ -30,6 +34,24 @@ namespace PostCompile
         {
             MissingDependencies = missingDependencies;
             InvalidDependencies = invalidDependencies;
+        }
+
+        public TaksRunnerDependencyException() : base("Aborted due to invalid or missing dependencies.")
+        {
+            MissingDependencies = Enumerable.Empty<MissingDependency>().ToList();
+            InvalidDependencies = Enumerable.Empty<InvalidDependency>().ToList();
+        }
+
+        public TaksRunnerDependencyException(string message) : base(message)
+        {
+            MissingDependencies = Enumerable.Empty<MissingDependency>().ToList();
+            InvalidDependencies = Enumerable.Empty<InvalidDependency>().ToList();
+        }
+
+        public TaksRunnerDependencyException(string message, Exception innerException) : base(message, innerException)
+        {
+            MissingDependencies = Enumerable.Empty<MissingDependency>().ToList();
+            InvalidDependencies = Enumerable.Empty<InvalidDependency>().ToList();
         }
     }
 
