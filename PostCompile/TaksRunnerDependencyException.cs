@@ -9,7 +9,6 @@ using System.Reflection;
 
 namespace PostCompile
 {
-
     [Serializable]
 #pragma warning disable CA2229 // Implement serialization constructors
 #pragma warning disable RCS1194 // Implement exception constructors.
