@@ -18,8 +18,21 @@ namespace PostCompile
 
         public T Value { get; }
 
+        ~Isolated()
+        {
+            Dispose(false);
+        }
+
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing) return;
+
             if (_domain != null)
             {
                 AppDomain.Unload(_domain);
