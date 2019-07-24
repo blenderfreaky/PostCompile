@@ -57,7 +57,7 @@ namespace PostCompile.Tests
             Assert.Equal("PostCompile.Tests.Helpers.Dummy.NestedDummy.DeeplyNested", typeof(Dummy.NestedDummy.DeeplyNested).GetTypeInfo().ToDisplayString());
             Assert.Equal("System.Collections.Generic.IEnumerable<int>", typeof(IEnumerable<int>).GetTypeInfo().ToDisplayString());
 
-            Assert.Equal("PostCompile.Tests.Helpers.Dummy.Method()", typeof(Dummy).GetMethod("Method", new Type[0]).ToDisplayString());
+            Assert.Equal("PostCompile.Tests.Helpers.Dummy.Method()", typeof(Dummy).GetMethod("Method", Array.Empty<Type>()).ToDisplayString());
             Assert.Equal("PostCompile.Tests.Helpers.Dummy.Method(int)", typeof(Dummy).GetMethod("Method", new[] { typeof(int) }).ToDisplayString());
             Assert.Equal("PostCompile.Tests.Helpers.Dummy.Method(string,int)", typeof(Dummy).GetMethod("Method", new[] { typeof(string), typeof(int) }).ToDisplayString());
             Assert.Equal("PostCompile.Tests.Helpers.Dummy.Method(System.Collections.Generic.IEnumerable<string>)", typeof(Dummy).GetMethod("Method", new[] { typeof(IEnumerable<string>) }).ToDisplayString());

@@ -1,5 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.MSBuild;
+﻿using Buildalyzer;
+using Buildalyzer.Workspaces;
+using Microsoft.CodeAnalysis;
 using PostCompile.Common;
 using PostCompile.Extensions;
 using System;
@@ -11,11 +12,11 @@ namespace PostCompile
 {
     public class TaskRunner : MarshalByRefObject
     {
-        public TaskRunnerResult Execute(string assemblyPath, string solutionPath)
+        public static TaskRunnerResult Execute(string assemblyPath, string projectPath)
         {
             var assembly = Assembly.LoadFrom(assemblyPath);
 
-            var tasks =
+            Dictionary<Type, IPostCompileTask> tasks =
                 (from type in assembly.GetTypes()
                  where typeof(IPostCompileTask).IsAssignableFrom(type)
                  where !type.IsAbstract
@@ -23,13 +24,13 @@ namespace PostCompile
                  select type).ToDictionary(x => x, x => (IPostCompileTask)Activator.CreateInstance(x));
             CheckTaskDependencies(tasks);
 
-            var sortedTaskInstances = tasks.Values.TopologicalSort(x => x.DependsOn.Select(y => tasks[y])).ToList();
+            List<IPostCompileTask> sortedTaskInstances = tasks.Values.TopologicalSort(x => x.DependsOn.Select(y => tasks[y])).ToList();
 
-            Solution solution;
-            using (var workspace = MSBuildWorkspace.Create())
-            {
-                solution = workspace.OpenSolutionAsync(solutionPath).Result;
-            }
+            AnalyzerManager manager = new AnalyzerManager();
+            ProjectAnalyzer analyzer = manager.GetProject(projectPath);
+            AdhocWorkspace workspace = analyzer.GetWorkspace();
+
+            Solution solution = workspace.CurrentSolution;
             var log = new ConcreteLog(solution, Console.Out);
 
             foreach (var taskInstance in sortedTaskInstances)

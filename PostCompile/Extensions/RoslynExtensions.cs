@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 
@@ -150,8 +151,8 @@ namespace PostCompile.Extensions
             if (methodSymbol.Name != methodInfo.Name)
                 return false;
 
-            var symbolParameters = methodSymbol.Parameters;
-            var methodInfoParameters = methodInfo.GetParameters();
+            ImmutableArray<IParameterSymbol> symbolParameters = methodSymbol.Parameters;
+            ParameterInfo[] methodInfoParameters = methodInfo.GetParameters();
 
             if (symbolParameters.Length != methodInfoParameters.Length)
                 return false;
@@ -175,8 +176,8 @@ namespace PostCompile.Extensions
             if (methodSymbol.Name != ".ctor")
                 return false;
 
-            var symbolParameters = methodSymbol.Parameters;
-            var constructorInfoParameters = constructorInfo.GetParameters();
+            ImmutableArray<IParameterSymbol> symbolParameters = methodSymbol.Parameters;
+            ParameterInfo[] constructorInfoParameters = constructorInfo.GetParameters();
 
             if (symbolParameters.Length != constructorInfoParameters.Length)
                 return false;

@@ -1,88 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4CB55835-C830-4026-88C7-22FAD60DCA4C}</ProjectGuid>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  
+  <Target Name="RunPostCompile" BeforeTargets="AfterBuild">
+    <Exec Command="..\packages\PostCompile.0.2.7.0\tools\PostCompile.exe &quot;$(ProjectDir)$(OutputPath)$(TargetFileName)&quot; &quot;$(SolutionPath)&quot;" ContinueOnError="False" />
+  </Target>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>Copyright © Martin Johns 2014</Copyright>
+    <PackageId>PostCompileStandard</PackageId>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/blenderfreaky/PostCompile.git</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <ApplicationIcon />
     <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PostCompile</RootNamespace>
-    <AssemblyName>PostCompile</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <StartupObject>PostCompile.Program</StartupObject>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="ConcreteLog.cs" />
-    <Compile Include="Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Extensions\RoslynExtensions.cs" />
-    <Compile Include="Extensions\TypeExtensions.cs" />
-    <Compile Include="Isolated.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TaksRunnerDependencyException.cs" />
-    <Compile Include="TaskRunner.cs" />
-    <Compile Include="TaskRunnerResult.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
     </None>
   </ItemGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
+    <PackageReference Include="Buildalyzer" Version="2.3.0" />
+    <PackageReference Include="Buildalyzer.Workspaces" Version="2.3.0" />
+    <PackageReference Include="Mono.Cecil" Version="0.10.4" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\PostCompile.Common\PostCompile.Common.csproj">
-      <Project>{6bcff960-e6e5-4834-938d-6839d6c5103c}</Project>
-      <Name>PostCompile.Common</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\PostCompile.Common\PostCompile.Common.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces">
-      <Version>0.6.4033103-beta</Version>
-    </PackageReference>
-    <PackageReference Include="Mono.Cecil">
-      <Version>0.9.5.4</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>mkdir "$(SolutionDir)NuGet\lib\net45\"
-copy "$(TargetDir)PostCompile.Common.dll" "$(SolutionDir)NuGet\lib\net45\"
-mkdir "$(SolutionDir)NuGet\tools\
-copy "$(TargetDir)PostCompile.exe" "$(SolutionDir)NuGet\tools\"
-copy "$(TargetDir)PostCompile.Common.dll" "$(SolutionDir)NuGet\tools\"
-copy "$(TargetDir)Microsoft.CodeAnalysis.CSharp.dll" "$(SolutionDir)NuGet\tools\"
-copy "$(TargetDir)Microsoft.CodeAnalysis.CSharp.Workspaces.dll" "$(SolutionDir)NuGet\tools\"
-copy "$(TargetDir)Microsoft.CodeAnalysis.dll" "$(SolutionDir)NuGet\tools\"
-copy "$(TargetDir)Microsoft.CodeAnalysis.Workspaces.dll" "$(SolutionDir)NuGet\tools\"
-copy "$(TargetDir)System.Collections.Immutable.dll" "$(SolutionDir)NuGet\tools\"
-copy "$(TargetDir)System.Reflection.Metadata.dll" "$(SolutionDir)NuGet\tools\"
-copy "$(TargetDir)Mono.Cecil.dll" "$(SolutionDir)NuGet\tools\"
-copy "$(TargetDir)Mono.Cecil.Mdb.dll" "$(SolutionDir)NuGet\tools\"
-copy "$(TargetDir)Mono.Cecil.Pdb.dll" "$(SolutionDir)NuGet\tools\"
-copy "$(TargetDir)Mono.Cecil.Rocks.dll" "$(SolutionDir)NuGet\tools\"</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -90,4 +44,5 @@ copy "$(TargetDir)Mono.Cecil.Rocks.dll" "$(SolutionDir)NuGet\tools\"</PostBuildE
   <Target Name="AfterBuild">
   </Target>
   -->
+  
 </Project>

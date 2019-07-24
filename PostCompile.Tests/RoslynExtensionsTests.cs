@@ -1,5 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.MSBuild;
+﻿using Buildalyzer;
+using Buildalyzer.Workspaces;
+using Microsoft.CodeAnalysis;
 using PostCompile.Extensions;
 using PostCompile.Tests.Helpers;
 using System;
@@ -19,18 +20,19 @@ namespace PostCompile.Tests
 
         public RoslynExtensionsTests()
         {
-            using (var workspace = MSBuildWorkspace.Create())
-            {
-                _solution = workspace.OpenSolutionAsync(@"..\..\..\PostCompile.sln").Result;
-                _testProject = _solution.Projects.First(x => x.Name == "PostCompile.Tests");
-                _testProjectCompilation = _testProject.GetCompilationAsync().Result;
-            }
+            AnalyzerManager manager = new AnalyzerManager();
+            ProjectAnalyzer analyzer = manager.GetProject(@"..\..\..\PostCompile.Tests.csproj");
+            AdhocWorkspace workspace = analyzer.GetWorkspace();
+
+            _solution = workspace.CurrentSolution;
+            _testProject = _solution.Projects.First(x => x.Name == "PostCompile.Tests");
+            _testProjectCompilation = _testProject.GetCompilationAsync().Result;
         }
 
         [Fact]
         public void GetTypeSymbols()
         {
-            var typeSymbols = _testProjectCompilation.GlobalNamespace.GetTypeSymbols();
+            IEnumerable<ITypeSymbol> typeSymbols = _testProjectCompilation.GlobalNamespace.GetTypeSymbols();
             var hashSet = new HashSet<string>(typeSymbols.Select(x => x.ToDisplayString()));
 
             Assert.Contains("PostCompile.Tests.Helpers.Dummy", hashSet);
@@ -50,7 +52,7 @@ namespace PostCompile.Tests
             Assert.NotNull(_solution.GetSymbol(typeof(Dummy.NestedDummy.DeeplyNested)));
             Assert.NotNull(_solution.GetSymbol(typeof(DummyTaskA)));
 
-            Assert.NotNull(typeof(Dummy).GetMethod("Method", new Type[0]).ToDisplayString());
+            Assert.NotNull(typeof(Dummy).GetMethod("Method", Array.Empty<Type>()).ToDisplayString());
             Assert.NotNull(typeof(Dummy).GetMethod("Method", new[] { typeof(int) }).ToDisplayString());
             Assert.NotNull(typeof(Dummy).GetMethod("Method", new[] { typeof(string), typeof(int) }).ToDisplayString());
             Assert.NotNull(typeof(Dummy).GetMethod("Method", new[] { typeof(IEnumerable<string>) }).ToDisplayString());

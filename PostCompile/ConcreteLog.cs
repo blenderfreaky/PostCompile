@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.FindSymbols;
 using PostCompile.Common;
 using PostCompile.Extensions;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -25,22 +26,22 @@ namespace PostCompile
 
         public void Error(string message)
         {
-            _writer.WriteLine("PostCompile: error: {0}", message);
+            _writer.WriteLine($"PostCompile: error: {message}");
         }
 
         public void Error(string file, string message)
         {
-            _writer.WriteLine("{0}: error: {1}", file, message);
+            _writer.WriteLine($"{file}: error: {message}");
         }
 
         public void Error(string file, int line, string message)
         {
-            _writer.WriteLine("{0}({1}): error: {2}", file, line, message);
+            _writer.WriteLine($"{file}({line}): error: {message}");
         }
 
         public void Error(string file, int line, int column, string message)
         {
-            _writer.WriteLine("{0}({1},{2}): error: {3}", file, line, column, message);
+            _writer.WriteLine($"{file}({line},{column}): error: {message}");
         }
 
         public void Error(MethodInfo methodInfo, string message)
@@ -48,8 +49,8 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(methodInfo);
             if (symbol == null)
             {
-                Error(string.Format("{0}: Method {1}", methodInfo.ToDisplayString(), message));
-                Warning(string.Format("Failed to locate symbol for method '{0}'.", methodInfo));
+                Error($"{methodInfo.ToDisplayString()}: Method {message}");
+                Warning($"Failed to locate symbol for method '{methodInfo}'.");
             }
             else
             {
@@ -62,8 +63,8 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(propertyInfo);
             if (symbol == null)
             {
-                Error(string.Format("{0}: Property {1}", propertyInfo.ToDisplayString(), message));
-                Warning(string.Format("Failed to locate symbol for property '{0}'.", propertyInfo));
+                Error($"{propertyInfo.ToDisplayString()}: Property {message}");
+                Warning($"Failed to locate symbol for property '{propertyInfo}'.");
             }
             else
             {
@@ -76,8 +77,8 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(constructorInfo);
             if (symbol == null)
             {
-                Error(string.Format("{0}: Constructor {1}", constructorInfo.ToDisplayString(), message));
-                Warning(string.Format("Failed to locate symbol for constructor '{0}'.", constructorInfo));
+                Error($"{constructorInfo.ToDisplayString()}: Constructor {message}");
+                Warning($"Failed to locate symbol for constructor '{constructorInfo}'.");
             }
             else
             {
@@ -90,8 +91,8 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(fieldInfo);
             if (symbol == null)
             {
-                Error(string.Format("{0}: Field {1}", fieldInfo.ToDisplayString(), message));
-                Warning(string.Format("Failed to locate symbol for field '{0}'.", fieldInfo));
+                Error($"{fieldInfo.ToDisplayString()}: Field {message}");
+                Warning($"Failed to locate symbol for field '{fieldInfo}'.");
             }
             else
             {
@@ -109,8 +110,8 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(type);
             if (symbol == null)
             {
-                Error(string.Format("{0}: Type {1}", type.ToDisplayString(), message));
-                Warning(string.Format("Failed to locate symbol for type '{0}'.", type));
+                Error($"{type.ToDisplayString()}: Type {message}");
+                Warning($"Failed to locate symbol for type '{type}'.");
             }
             else
             {
@@ -173,8 +174,8 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(methodInfo);
             if (symbol == null)
             {
-                Warning(string.Format("{0}: Method {1}", methodInfo.ToDisplayString(), message));
-                Warning(string.Format("Failed to locate symbol for method '{0}'.", methodInfo));
+                Warning($"{methodInfo.ToDisplayString()}: Method {message}");
+                Warning($"Failed to locate symbol for method '{methodInfo}'.");
             }
             else
             {
@@ -187,8 +188,8 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(propertyInfo);
             if (symbol == null)
             {
-                Warning(string.Format("{0}: Property {1}", propertyInfo.ToDisplayString(), message));
-                Warning(string.Format("Failed to locate symbol for property '{0}'.", propertyInfo));
+                Warning($"{propertyInfo.ToDisplayString()}: Property {message}");
+                Warning($"Failed to locate symbol for property '{propertyInfo}'.");
             }
             else
             {
@@ -201,8 +202,8 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(constructorInfo);
             if (symbol == null)
             {
-                Warning(string.Format("{0}: Constructor {1}", constructorInfo.ToDisplayString(), message));
-                Warning(string.Format("Failed to locate symbol for constructor '{0}'.", constructorInfo));
+                Warning($"{constructorInfo.ToDisplayString()}: Constructor {message}");
+                Warning($"Failed to locate symbol for constructor '{constructorInfo}'.");
             }
             else
             {
@@ -215,8 +216,8 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(fieldInfo);
             if (symbol == null)
             {
-                Warning(string.Format("{0}: Field {1}", fieldInfo.ToDisplayString(), message));
-                Warning(string.Format("Failed to locate symbol for field '{0}'.", fieldInfo));
+                Warning($"{fieldInfo.ToDisplayString()}: Field {message}");
+                Warning($"Failed to locate symbol for field '{fieldInfo}'.");
             }
             else
             {
@@ -234,8 +235,8 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(type);
             if (symbol == null)
             {
-                Warning(string.Format("{0}: Type {1}", type.ToDisplayString(), message));
-                Warning(string.Format("Failed to locate symbol for type '{0}'.", type));
+                Warning($"{type.ToDisplayString()}: Type {message}");
+                Warning($"Failed to locate symbol for type '{type}'.");
             }
             else
             {
@@ -278,11 +279,11 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(methodInfo);
             if (symbol == null)
             {
-                Warning(string.Format("Failed to locate symbol for method '{0}'.", methodInfo));
+                Warning($"Failed to locate symbol for method '{methodInfo}'.");
             }
             else
             {
-                var callers = SymbolFinder.FindCallersAsync(symbol, _solution).Result;
+                IEnumerable<SymbolCallerInfo> callers = SymbolFinder.FindCallersAsync(symbol, _solution).Result;
                 foreach (var caller in callers)
                 {
                     Error(caller, message);
@@ -295,11 +296,11 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(propertyInfo);
             if (symbol == null)
             {
-                Warning(string.Format("Failed to locate symbol for property '{0}'.", propertyInfo));
+                Warning($"Failed to locate symbol for property '{propertyInfo}'.");
             }
             else
             {
-                var callers = SymbolFinder.FindCallersAsync(symbol, _solution).Result;
+                IEnumerable<SymbolCallerInfo> callers = SymbolFinder.FindCallersAsync(symbol, _solution).Result;
                 foreach (var caller in callers)
                 {
                     Error(caller, message);
@@ -312,11 +313,11 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(constructorInfo);
             if (symbol == null)
             {
-                Warning(string.Format("Failed to locate symbol for constructor '{0}'.", constructorInfo));
+                Warning($"Failed to locate symbol for constructor '{constructorInfo}'.");
             }
             else
             {
-                var callers = SymbolFinder.FindCallersAsync(symbol, _solution).Result;
+                IEnumerable<SymbolCallerInfo> callers = SymbolFinder.FindCallersAsync(symbol, _solution).Result;
                 foreach (var caller in callers)
                 {
                     Error(caller, message);
@@ -333,11 +334,11 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(methodInfo);
             if (symbol == null)
             {
-                Warning(string.Format("Failed to locate symbol for method '{0}'.", methodInfo));
+                Warning($"Failed to locate symbol for method '{methodInfo}'.");
             }
             else
             {
-                var callers = SymbolFinder.FindCallersAsync(symbol, _solution).Result;
+                IEnumerable<SymbolCallerInfo> callers = SymbolFinder.FindCallersAsync(symbol, _solution).Result;
                 foreach (var caller in callers)
                 {
                     Warning(caller, message);
@@ -350,11 +351,11 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(propertyInfo);
             if (symbol == null)
             {
-                Warning(string.Format("Failed to locate symbol for property '{0}'.", propertyInfo));
+                Warning($"Failed to locate symbol for property '{propertyInfo}'.");
             }
             else
             {
-                var callers = SymbolFinder.FindCallersAsync(symbol, _solution).Result;
+                IEnumerable<SymbolCallerInfo> callers = SymbolFinder.FindCallersAsync(symbol, _solution).Result;
                 foreach (var caller in callers)
                 {
                     Warning(caller, message);
@@ -367,11 +368,11 @@ namespace PostCompile
             var symbol = _solution.GetSymbol(constructorInfo);
             if (symbol == null)
             {
-                Warning(string.Format("Failed to locate symbol for constructor '{0}'.", constructorInfo));
+                Warning($"Failed to locate symbol for constructor '{constructorInfo}'.");
             }
             else
             {
-                var callers = SymbolFinder.FindCallersAsync(symbol, _solution).Result;
+                IEnumerable<SymbolCallerInfo> callers = SymbolFinder.FindCallersAsync(symbol, _solution).Result;
                 foreach (var caller in callers)
                 {
                     Warning(caller, message);

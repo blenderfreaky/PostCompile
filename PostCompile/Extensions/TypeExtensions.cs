@@ -24,17 +24,13 @@ namespace PostCompile.Extensions
 
             if (type.IsArray)
             {
-                return string.Format(
-                    "{0}[]",
-                    type.GetElementType().ToDisplayString());
+                return $"{type.GetElementType().ToDisplayString()}[]";
             }
 
             if (type.IsGenericType)
             {
-                return string.Format(
-                    "{0}<{1}>",
-                    type.FullName.Split('`')[0].Replace("+", "."),
-                    string.Join(",", type.GetGenericArguments().Select(ToDisplayString)));
+                return
+                    $"{type.FullName.Split('`')[0].Replace("+", ".")}<{string.Join(",", type.GetGenericArguments().Select(ToDisplayString))}>";
             }
 
             switch (type.FullName)
@@ -53,9 +49,8 @@ namespace PostCompile.Extensions
                 case "System.Decimal": return "decimal";
                 case "System.String": return "string";
                 case "System.Object": return "object";
+                default: return type.FullName.Replace("+", ".");
             }
-
-            return type.FullName.Replace("+", ".");
         }
 
         public static string ToDisplayString(this MethodInfo methodInfo)
@@ -63,11 +58,8 @@ namespace PostCompile.Extensions
             if (methodInfo == null)
                 throw new ArgumentNullException(nameof(methodInfo));
 
-            return string.Format(
-                "{0}.{1}({2})",
-                methodInfo.DeclaringType.ToDisplayString(),
-                methodInfo.Name,
-                string.Join(",", methodInfo.GetParameters().Select(x => x.ParameterType.ToDisplayString())));
+            return
+                $"{methodInfo.DeclaringType.ToDisplayString()}.{methodInfo.Name}({string.Join(",", methodInfo.GetParameters().Select(x => x.ParameterType.ToDisplayString()))})";
         }
 
         public static string ToDisplayString(this PropertyInfo propertyInfo)
@@ -75,10 +67,7 @@ namespace PostCompile.Extensions
             if (propertyInfo == null)
                 throw new ArgumentNullException(nameof(propertyInfo));
 
-            return string.Format(
-                "{0}.{1}",
-                propertyInfo.DeclaringType.ToDisplayString(),
-                propertyInfo.Name);
+            return $"{propertyInfo.DeclaringType.ToDisplayString()}.{propertyInfo.Name}";
         }
 
         public static string ToDisplayString(this ConstructorInfo constructorInfo)
@@ -86,10 +75,8 @@ namespace PostCompile.Extensions
             if (constructorInfo == null)
                 throw new ArgumentNullException(nameof(constructorInfo));
 
-            return string.Format(
-                "{0}({1})",
-                constructorInfo.DeclaringType.ToDisplayString(),
-                string.Join(",", constructorInfo.GetParameters().Select(x => x.ParameterType.ToDisplayString())));
+            return
+                $"{constructorInfo.DeclaringType.ToDisplayString()}({string.Join(",", constructorInfo.GetParameters().Select(x => x.ParameterType.ToDisplayString()))})";
         }
 
         public static string ToDisplayString(this FieldInfo fieldInfo)
@@ -97,10 +84,7 @@ namespace PostCompile.Extensions
             if (fieldInfo == null)
                 throw new ArgumentNullException(nameof(fieldInfo));
 
-            return string.Format(
-                "{0}.{1}",
-                fieldInfo.DeclaringType.ToDisplayString(),
-                fieldInfo.Name);
+            return $"{fieldInfo.DeclaringType.ToDisplayString()}.{fieldInfo.Name}";
         }
 
         public static string ToDisplayString(this TypeInfo typeInfo)

@@ -1,23 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29111.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostCompile", "PostCompile\PostCompile.csproj", "{4CB55835-C830-4026-88C7-22FAD60DCA4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostCompile", "PostCompile\PostCompile.csproj", "{4CB55835-C830-4026-88C7-22FAD60DCA4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostCompile.Common", "PostCompile.Common\PostCompile.Common.csproj", "{6BCFF960-E6E5-4834-938D-6839D6C5103C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostCompile.Common", "PostCompile.Common\PostCompile.Common.csproj", "{6BCFF960-E6E5-4834-938D-6839D6C5103C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{668E49B7-465A-489A-A917-74E4ABAAA9B3}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\PostCompile.nuspec = NuGet\PostCompile.nuspec
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{35BEFEF6-7B61-4EB1-A878-ADB3A8468C83}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\build\PostCompile.targets = NuGet\build\PostCompile.targets
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostCompile.Tests", "PostCompile.Tests\PostCompile.Tests.csproj", "{A2C229EC-4658-4358-8A4E-F16A0889AC05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostCompile.Tests", "PostCompile.Tests\PostCompile.Tests.csproj", "{A2C229EC-4658-4358-8A4E-F16A0889AC05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,7 +31,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{35BEFEF6-7B61-4EB1-A878-ADB3A8468C83} = {668E49B7-465A-489A-A917-74E4ABAAA9B3}
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C51904D3-AA80-4648-A9C7-62B40041D321}
 	EndGlobalSection
 EndGlobal

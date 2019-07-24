@@ -14,20 +14,16 @@ namespace PostCompile
                 if (args.Length != 2)
                     throw new ArgumentException("Invalid of amount arguments passed.", nameof(args));
 
-                var assemblyPath = args[0];
-                var solutionPath = args[1];
+                string assemblyPath = args[0];
+                string projectPath = args[1];
 
                 if (!File.Exists(assemblyPath))
                     throw new FileNotFoundException("Failed to locate assembly.");
 
-                if (!File.Exists(solutionPath))
-                    throw new FileNotFoundException("Failed to locate solution.");
+                if (!File.Exists(projectPath))
+                    throw new FileNotFoundException("Failed to locate project.");
 
-                TaskRunnerResult result;
-                using (var isolated = new Isolated<TaskRunner>())
-                {
-                    result = isolated.Value.Execute(assemblyPath, solutionPath);
-                }
+                TaskRunnerResult result = TaskRunner.Execute(assemblyPath, projectPath);
 
                 var module = ModuleDefinition.ReadModule(assemblyPath);
                 foreach (var t in module.Types.Where(x => result.TaskTypes.Contains(x.FullName)))
